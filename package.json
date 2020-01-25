@@ -1,0 +1,11 @@
+{
+  "name": "twitometer",
+  "version": "1.0.0-alpha",
+  "description": "Twitter Stream Analyzer",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "palafx@gmail.com",
+  "license": "ISC"
+}
