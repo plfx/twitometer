@@ -10,5 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "twitter": "^1.7.1"
+  },
+  "devDependencies": {
+    "mocha": "^7.0.0"
   }
 }
