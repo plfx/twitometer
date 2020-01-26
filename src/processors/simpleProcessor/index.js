@@ -1,9 +1,9 @@
-const { DataViewBase } = require('../views/base')
+const { DataViewBase } = require('../../views/base')
 
 class SimpleProcessor {
   constructor(views, options = {}) {
     const optionsDefaults = {
-      getCurrentTimeSeconds: () => Date.now()
+      getCurrentTimeSeconds: () => Math.floor(Date.now() / 1000)
     }
     this.options = Object.assign({}, optionsDefaults, options)
 
@@ -15,7 +15,7 @@ class SimpleProcessor {
       }
 
       const viewName = view.getName()
-      this.data[viewName] = view.createSample(Math.floor(Date.now() / 1000), Infinity)
+      this.data[viewName] = view.createSample(this.options.getCurrentTimeSeconds(), Infinity)
     })
 
     this.elapsedTweets = 0
