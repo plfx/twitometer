@@ -22,10 +22,13 @@ describe('UrlStatsView', function() {
         entities: {
           urls: [
             {
-              "expanded_url": "https://domain0/a/b/c/d"
+              "expanded_url": "https://DOMAIN0/a/b/c/d"
             },
             {
               "expanded_url": "wss://domain1/e/f/g/h"
+            },
+            {
+              "expanded_url": "http://Domain2/etc"
             }
           ]
         }
@@ -38,7 +41,8 @@ describe('UrlStatsView', function() {
         countWithUrls: 21,
         domains: {
           'domain0': 2,
-          'domain1': 4
+          'domain1': 4,
+          'domain2': 1
         }
       })
     })
