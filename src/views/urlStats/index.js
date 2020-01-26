@@ -62,7 +62,7 @@ class UrlStatsView extends WindowingProcessorBase {
 
     return {
       count: aggregateData.count,
-      countWithUrls: aggregateData.count,
+      countWithUrls: aggregateData.countWithUrls,
       urlRatio,
       domains: domainsSorted
     }
