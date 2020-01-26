@@ -2,7 +2,7 @@ const EventEmitter = require('events')
 const samples = require('./sample.json')
 
 async function getFakeStream(tweetCount = 200) {
-  if(tweetCount >= samples.length) {
+  if(tweetCount > samples.length) {
     throw new Error(`The specified tweet count (${tweetCount}) for is too large. The tweet count must be no more than 200.`)
   }
 
