@@ -11,6 +11,7 @@ describe('TweetCountView', function() {
     before(function() {
       this.sampleData = {
         count: 100,
+        sampleStartSeconds: 1000000000,
         sampleSizeSeconds: 1
       }
 
@@ -20,6 +21,7 @@ describe('TweetCountView', function() {
     it('updates the sample data', function() {
       assert.deepEqual(this.sampleData, {
         count: 101,
+        sampleStartSeconds: 1000000000,
         sampleSizeSeconds: 1
       })
     })
@@ -30,17 +32,20 @@ describe('TweetCountView', function() {
       this.aggregated = this.view.aggregateSamples([
         {
           count: 50,
+          sampleStartSeconds: 1000000000,
           sampleSizeSeconds: 1
         },
         {
           count: 10,
+          sampleStartSeconds: 1000000001,
           sampleSizeSeconds: 1
         },
         {
           count: 40,
+          sampleStartSeconds: 1000000002,
           sampleSizeSeconds: 1
         }
-      ])
+      ], 1000000003)
     })
 
     it('sums correctly', function() {

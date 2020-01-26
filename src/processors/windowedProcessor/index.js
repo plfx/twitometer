@@ -28,7 +28,8 @@ class WindowedProcessor {
     this.elapsedTweets++
     const timestampSeconds = Math.floor(new Date(tweet.created_at).valueOf() / 1000) - this.options.dawnOfTime
 
-    const windowStartSeconds = (this.options.getCurrentTimeSeconds() - this.options.dawnOfTime) - this.options.dataWindowSizeSeconds
+    const currentTimeSeconds = this.options.getCurrentTimeSeconds() - this.options.dawnOfTime
+    const windowStartSeconds = currentTimeSeconds - this.options.dataWindowSizeSeconds
     if(timestampSeconds < windowStartSeconds) {
       // this tweet was created before the sample window, so it is ignored
       return
@@ -55,8 +56,8 @@ class WindowedProcessor {
 
   async report() {
     const sampleSizeSeconds = this.options.dataWindowSizeSeconds / this.options.dataWindowResolution
-    const nowSeconds = (this.options.getCurrentTimeSeconds() - this.options.dawnOfTime)
-    const currentSampleStartSeconds = nowSeconds - (nowSeconds % sampleSizeSeconds)
+    const currentTimeSeconds = this.options.getCurrentTimeSeconds() - this.options.dawnOfTime
+    const currentSampleStartSeconds = currentTimeSeconds - (currentTimeSeconds % sampleSizeSeconds)
     const windowStartSeconds = nowSeconds - this.options.dataWindowSizeSeconds
 
     const report = {}
@@ -70,8 +71,8 @@ class WindowedProcessor {
           yield viewSampleData
         }
       }
-      const aggregateData = view.aggregateSamples(yieldSamples(this.dataSamples))
-      report[viewName] = view.generateReport(aggregateData)
+      const aggregateData = view.aggregateSamples(yieldSamples(this.dataSamples), currentTimeSeconds)
+      report[viewName] = view.generateReport(aggregateData, currentTimeSeconds)
     })
 
     report.elapsedTweets = this.elapsedTweets

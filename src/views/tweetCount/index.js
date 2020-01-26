@@ -8,6 +8,7 @@ class TweetCountView extends DataViewBase {
   createSample(sampleStartSeconds, sampleSizeSeconds) {
     return {
       count: 0,
+      sampleStartSeconds,
       sampleSizeSeconds
     }
   }
@@ -16,7 +17,7 @@ class TweetCountView extends DataViewBase {
     sampleData.count++
   }
 
-  aggregateSamples(sampleIterator) {
+  aggregateSamples(sampleIterator, currentTimeSeconds) {
     const aggregateData = {
       count: 0,
       timeSpanSeconds: 0
@@ -24,7 +25,8 @@ class TweetCountView extends DataViewBase {
 
     for(const sampleData of sampleIterator) {
       aggregateData.count += sampleData.count
-      aggregateData.timeSpanSeconds += sampleData.sampleSizeSeconds
+      // for the final/current sample, only add the amount of time elapsed
+      aggregateData.timeSpanSeconds += Math.min(sampleData.sampleSizeSeconds, currentTimeSeconds - sampleData.sampleStartSeconds)
     }
     return aggregateData
   }
