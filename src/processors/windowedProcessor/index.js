@@ -6,7 +6,7 @@ class WindowedProcessor {
       dataWindowSizeSeconds: 24 * 60 * 60 * 1000, // 1 day
       dataWindowResolution: 400,
       getCurrentTimeSeconds: () => Date.now(),
-      dawnOfTime: options.getCurrentTimeSeconds ? options.getCurrentTimeSeconds() : Math.floor(Date.now()/1000)
+      dawnOfTime: options.getCurrentTimeSeconds ? options.getCurrentTimeSeconds() : Math.floor(Date.now() / 1000)
     }
     this.options = Object.assign({}, optionsDefaults, options)
     if(this.options.dataWindowSizeSeconds % this.options.dataWindowResolution) {
@@ -26,7 +26,7 @@ class WindowedProcessor {
 
   handle(tweet) {
     this.elapsedTweets++
-    const timestampSeconds = Math.floor(new Date(tweet.created_at).valueOf()/1000) - this.options.dawnOfTime
+    const timestampSeconds = Math.floor(new Date(tweet.created_at).valueOf() / 1000) - this.options.dawnOfTime
 
     const windowStartSeconds = (this.options.getCurrentTimeSeconds() - this.options.dawnOfTime) - this.options.dataWindowSizeSeconds
     if(timestampSeconds < windowStartSeconds) {
