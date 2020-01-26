@@ -46,10 +46,10 @@ class WindowedProcessor {
       this.dataSamples[sampleStartSeconds.toString()] = sampleData
     }
 
-    this.views.forEach(async (view) => {
+    this.views.forEach((view) => {
       const viewName = view.getName()
       const viewSampleData = sampleData[viewName]
-      await view.processTweet(tweet, viewSampleData)
+      view.processTweet(tweet, viewSampleData, currentTimeSeconds)
     })
   }
 
