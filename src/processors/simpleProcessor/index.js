@@ -37,7 +37,7 @@ class SimpleProcessor {
 
     this.views.forEach((view) => {
       const viewName = view.getName()
-      report[viewName] = view.generateReport(view.aggregateData([this.data[viewName]]))
+      report[viewName] = view.generateReport(view.aggregateSamples([this.data[viewName]]))
     })
 
     return report
