@@ -74,6 +74,7 @@ class WindowedProcessor {
       report[viewName] = view.generateReport(aggregateData)
     })
 
+    report.elapsedTweets = this.elapsedTweets
     return report
   }
 }
