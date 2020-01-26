@@ -5,9 +5,10 @@ class TweetCountView extends DataViewBase {
     super('tweetCount')
   }
 
-  createSample() {
+  createSample(sampleStartSeconds, sampleSizeSeconds) {
     return {
-      count: 0
+      count: 0,
+      sampleSizeSeconds
     }
   }
 
@@ -17,17 +18,21 @@ class TweetCountView extends DataViewBase {
 
   aggregateSamples(sampleIterator) {
     const aggregateData = {
-      total: 0
+      count: 0,
+      timeSpanSeconds: 0
     }
 
     for(const sampleData of sampleIterator) {
-      aggregateData.total += sampleData.count
+      aggregateData.count += sampleData.count
+      aggregateData.timeSpanSeconds += sampleData.sampleSizeSeconds
     }
     return aggregateData
   }
 
   generateReport(aggregateData) {
-    return aggregateData
+    return {
+      avgTweetsPerHour: aggregateData.count * 3600 / aggregateData.timeSpanSeconds
+    }
   }
 }
 

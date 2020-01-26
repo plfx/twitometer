@@ -10,7 +10,8 @@ describe('TweetCountView', function() {
   describe('processTweet', function() {
     before(function() {
       this.sampleData = {
-        count: 100
+        count: 100,
+        sampleSizeSeconds: 1
       }
 
       this.view.processTweet({}, this.sampleData)
@@ -18,7 +19,8 @@ describe('TweetCountView', function() {
 
     it('updates the sample data', function() {
       assert.deepEqual(this.sampleData, {
-        count: 101
+        count: 101,
+        sampleSizeSeconds: 1
       })
     })
   })
@@ -27,20 +29,24 @@ describe('TweetCountView', function() {
     before(function() {
       this.aggregated = this.view.aggregateSamples([
         {
-          count: 5
+          count: 50,
+          sampleSizeSeconds: 1
         },
         {
-          count: 10
+          count: 10,
+          sampleSizeSeconds: 1
         },
         {
-          count: 5
+          count: 40,
+          sampleSizeSeconds: 1
         }
       ])
     })
 
     it('sums correctly', function() {
       assert.deepEqual(this.aggregated, {
-        total: 20
+        count: 100,
+        timeSpanSeconds: 3
       })
     })
   })
@@ -48,13 +54,14 @@ describe('TweetCountView', function() {
   describe('generateReport', function() {
     before(function() {
       this.report = this.view.generateReport({
-        total: 100
+        count: 100,
+        timeSpanSeconds: 3
       })
     })
 
     it('generates correct stats', function() {
       assert.deepEqual(this.report, {
-        total: 100
+        avgTweetsPerHour: 120000
       })
     })
   })
