@@ -20,6 +20,5 @@ describe('urlStats', function() {
 
   it('should return the count of tweets', async function() {
     const report = await this.processor.report()
-    console.log(report)
   })
 })

@@ -1,40 +1,19 @@
-class UrlStatsProcessor {
-  constructor(options = {}) {
-    const optionsDefaults = {
-      dataWindowSizeSeconds: 24 * 60 * 60 * 1000, // 1 day
-      dataWindowResolution: 400,
-      getCurrentTimeSeconds: () => Date.now(),
-      dawnOfTime: options.getCurrentTimeSeconds ? options.getCurrentTimeSeconds() : Math.floor(Date.now()/1000)
-    }
-    this.options = Object.assign({}, optionsDefaults, options)
-    if(this.options.dataWindowSizeSeconds % this.options.dataWindowResolution) {
-      throw new Error('Invalid options: dataWindowSizeSeconds must be divisble by dataWindowResolution.')
-    }
+const { WindowingProcessorBase } = require('../processor')
 
-    this.data = {
-      dataSamples: []
+class UrlStatsProcessor extends WindowingProcessorBase {
+  constructor(options = {}) {
+    super('urlStats', options)
+  }
+
+  createSample() {
+    return {
+      count: 0,
+      countWithUrls: 0,
+      domains: {}
     }
   }
 
-  async handle(tweet) {
-    const timestampSeconds = Math.floor(new Date(tweet.created_at).valueOf()/1000) - this.options.dawnOfTime
-
-    const windowStartSeconds = (this.options.getCurrentTimeSeconds() - this.options.dawnOfTime) - this.options.dataWindowSizeSeconds
-    if(timestampSeconds < windowStartSeconds) {
-      // this tweet was created before the sample window, so it is ignored
-      return
-    }
-
-    const sampleSizeSeconds = this.options.dataWindowSizeSeconds / this.options.dataWindowResolution
-    const sampleStartSeconds = timestampSeconds - (timestampSeconds % sampleSizeSeconds)
-    const sampleData = this.data.dataSamples[sampleStartSeconds.toString()] || (
-      this.data.dataSamples[sampleStartSeconds.toString()] = {
-        count: 0,
-        countWithUrls: 0,
-        domains: {}
-      }
-    )
-
+  processTweet(tweet, sampleData) {
     sampleData.count++
     if(tweet.entities.urls.length > 0) {
       sampleData.countWithUrls++
@@ -50,23 +29,14 @@ class UrlStatsProcessor {
     }
   }
 
-  async report() {
-    const sampleSizeSeconds = this.options.dataWindowSizeSeconds / this.options.dataWindowResolution
-    const nowSeconds = (this.options.getCurrentTimeSeconds() - this.options.dawnOfTime)
-    const currentSampleStartSeconds = nowSeconds - (nowSeconds % sampleSizeSeconds)
-    const windowStartSeconds = nowSeconds - this.options.dataWindowSizeSeconds
-
+  aggregateSamples(sampleIterator) {
     const aggregateData = {
       count: 0,
       countWithUrls: 0,
       domains: {}
     }
 
-    for(let t = currentSampleStartSeconds; t >= windowStartSeconds; t -= sampleSizeSeconds) {
-      const sampleData = this.data.dataSamples[t.toString()]
-      if(!sampleData) {
-        continue
-      }
+    for(const sampleData of sampleIterator) {
       aggregateData.count += sampleData.count
       aggregateData.countWithUrls += sampleData.countWithUrls
       Object.entries(sampleData.domains).forEach(([domain, count]) => {
@@ -78,6 +48,10 @@ class UrlStatsProcessor {
       })
     }
 
+    return aggregateData
+  }
+
+  generateReport(aggregateData) {
     const urlRatio = (aggregateData.countWithUrls) && (aggregateData.countWithUrls / aggregateData.count)
 
     const domainsSorted = Object.entries(aggregateData.domains).map(([domain, count]) => ({

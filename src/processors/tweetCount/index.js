@@ -1,17 +1,34 @@
-class TweetCountProcessor {
-  constructor(stream) {
-    this.data = {
-      total: 0
+const { WindowingProcessorBase } = require('../processor')
+
+class UrlStatsProcessor extends WindowingProcessorBase {
+  constructor(options = {}) {
+    super('tweetCount', options)
+  }
+
+  createSample() {
+    return {
+      count: 0
     }
   }
 
-  async handle(tweet) {
-    this.data.total++
+  processTweet(tweet, sampleData) {
+    sampleData.count++
   }
 
-  async report() {
-    return Object.assign({}, this.data)
+  aggregateSamples(sampleIterator) {
+    const aggregateData = {
+      total: 0
+    }
+
+    for(const sampleData of sampleIterator) {
+      aggregateData.total += sampleData.count
+    }
+    return aggregateData
+  }
+
+  generateReport(aggregateData) {
+    return Object.assign({}, aggregateData)
   }
 }
 
-module.exports = TweetCountProcessor
+module.exports = UrlStatsProcessor
