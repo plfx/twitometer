@@ -21,9 +21,11 @@ class WindowingProcessor {
     })
 
     this.dataSamples = []
+    this.elapsedTweets = 0
   }
 
   handle(tweet) {
+    this.elapsedTweets++
     const timestampSeconds = Math.floor(new Date(tweet.created_at).valueOf()/1000) - this.options.dawnOfTime
 
     const windowStartSeconds = (this.options.getCurrentTimeSeconds() - this.options.dawnOfTime) - this.options.dataWindowSizeSeconds
