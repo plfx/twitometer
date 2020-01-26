@@ -43,3 +43,5 @@ class SimpleProcessor {
     return report
   }
 }
+
+module.exports = { SimpleProcessor }
