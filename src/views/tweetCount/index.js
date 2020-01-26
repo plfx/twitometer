@@ -27,7 +27,7 @@ class TweetCountView extends DataViewBase {
   }
 
   generateReport(aggregateData) {
-    return Object.assign({}, aggregateData)
+    return aggregateData
   }
 }
 

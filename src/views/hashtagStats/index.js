@@ -1,6 +1,6 @@
 const { DataViewBase } = require('../base')
 
-class HashtagStatsView extends WindowingProcessorBase {
+class HashtagStatsView extends DataViewBase {
   constructor() {
     super('hashtagStats')
   }
@@ -66,4 +66,4 @@ class HashtagStatsView extends WindowingProcessorBase {
   }
 }
 
-module.exports = HashtagStatsView
+module.exports = { HashtagStatsView }

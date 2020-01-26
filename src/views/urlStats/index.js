@@ -1,6 +1,6 @@
 const { DataViewBase } = require('../base')
 
-class UrlStatsView extends WindowingProcessorBase {
+class UrlStatsView extends DataViewBase {
   constructor() {
     super('urlStats')
   }
@@ -69,4 +69,4 @@ class UrlStatsView extends WindowingProcessorBase {
   }
 }
 
-module.exports = UrlStatsView
+module.exports = { UrlStatsView }
