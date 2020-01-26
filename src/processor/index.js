@@ -1,5 +1,7 @@
-class WindowingProcessorBase {
-  constructor(viewName, options) {
+const { DataViewBase } = require('../views/base')
+
+class WindowingProcessor {
+  constructor(views, options = {}) {
     const optionsDefaults = {
       dataWindowSizeSeconds: 24 * 60 * 60 * 1000, // 1 day
       dataWindowResolution: 400,
@@ -11,10 +13,17 @@ class WindowingProcessorBase {
       throw new Error('Invalid options: dataWindowSizeSeconds must be divisble by dataWindowResolution.')
     }
 
+    this.views = views
+    this.views.forEach((view) => {
+      if(!view instanceof DataViewBase) {
+        throw new Error(`Type [${view && view.constructor.name}] is not a data view.`)
+      }
+    })
+
     this.dataSamples = []
   }
 
-  async handle(tweet) {
+  handle(tweet) {
     const timestampSeconds = Math.floor(new Date(tweet.created_at).valueOf()/1000) - this.options.dawnOfTime
 
     const windowStartSeconds = (this.options.getCurrentTimeSeconds() - this.options.dawnOfTime) - this.options.dataWindowSizeSeconds
@@ -25,11 +34,21 @@ class WindowingProcessorBase {
 
     const sampleSizeSeconds = this.options.dataWindowSizeSeconds / this.options.dataWindowResolution
     const sampleStartSeconds = timestampSeconds - (timestampSeconds % sampleSizeSeconds)
-    const sampleData = this.dataSamples[sampleStartSeconds.toString()] || (
-      this.dataSamples[sampleStartSeconds.toString()] = this.createSample()
-    )
+    let sampleData = this.dataSamples[sampleStartSeconds.toString()]
+    if (!sampleData) {
+      sampleData = {}
+      this.views.forEach((view) => {
+        const viewName = view.getName()
+        sampleData[viewName] = view.createSample()
+      })
+      this.dataSamples[sampleStartSeconds.toString()] = sampleData
+    }
 
-    this.processTweet(tweet, sampleData)
+    this.views.forEach(async (view) => {
+      const viewName = view.getName()
+      const viewSampleData = sampleData[viewName]
+      await view.processTweet(tweet, viewSampleData)
+    })
   }
 
   async report() {
@@ -38,16 +57,22 @@ class WindowingProcessorBase {
     const currentSampleStartSeconds = nowSeconds - (nowSeconds % sampleSizeSeconds)
     const windowStartSeconds = nowSeconds - this.options.dataWindowSizeSeconds
 
-    function * yieldSamples(processor) {
-      for(let t = currentSampleStartSeconds; t >= windowStartSeconds; t -= sampleSizeSeconds) {
-        const sampleData = processor.dataSamples[t.toString()] || processor.createSample()
-        yield sampleData
-      }
-    }
-    const aggregateData = this.aggregateSamples(yieldSamples(this))
+    const report = {}
 
-    const report = this.generateReport(aggregateData)
+    this.views.forEach((view) => {
+      const viewName = view.getName()
+      function * yieldSamples(dataSamples) {
+        for(let t = currentSampleStartSeconds; t >= windowStartSeconds; t -= sampleSizeSeconds) {
+          const sampleData = dataSamples[t.toString()] || {}
+          const viewSampleData = sampleData[viewName] || view.createSample()
+          yield viewSampleData
+        }
+      }
+      const aggregateData = view.aggregateSamples(yieldSamples(this.dataSamples))
+      report[viewName] = view.generateReport(aggregateData)
+    })
+
     return report
   }
 }
- module.exports = { WindowingProcessorBase }
+module.exports = { WindowingProcessor }

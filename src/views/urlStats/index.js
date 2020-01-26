@@ -1,8 +1,8 @@
-const { WindowingProcessorBase } = require('../processor')
+const { DataViewBase } = require('../base')
 
-class UrlStatsProcessor extends WindowingProcessorBase {
-  constructor(options = {}) {
-    super('urlStats', options)
+class UrlStatsView extends WindowingProcessorBase {
+  constructor() {
+    super('urlStats')
   }
 
   createSample() {
@@ -69,4 +69,4 @@ class UrlStatsProcessor extends WindowingProcessorBase {
   }
 }
 
-module.exports = UrlStatsProcessor
+module.exports = UrlStatsView

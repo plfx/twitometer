@@ -1,8 +1,8 @@
-const { WindowingProcessorBase } = require('../processor')
+const { DataViewBase } = require('../base')
 
-class UrlStatsProcessor extends WindowingProcessorBase {
-  constructor(options = {}) {
-    super('tweetCount', options)
+class TweetCountView extends DataViewBase {
+  constructor() {
+    super('tweetCount')
   }
 
   createSample() {
@@ -31,4 +31,4 @@ class UrlStatsProcessor extends WindowingProcessorBase {
   }
 }
 
-module.exports = UrlStatsProcessor
+module.exports = { TweetCountView }
