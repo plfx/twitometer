@@ -1,8 +1,13 @@
 const { DataViewBase } = require('../base')
 
 class HashtagStatsView extends DataViewBase {
-  constructor() {
+  constructor(options = {}) {
     super('hashtagStats')
+
+    const optionsDefaults = {
+      maxRanks: 5
+    }
+    this.options = Object.assign({}, optionsDefaults, options)
   }
 
   createSample() {
@@ -52,11 +57,19 @@ class HashtagStatsView extends DataViewBase {
   }
 
   generateReport(aggregateData) {
-    const hashtagsByCount = Object.entries(aggregateData.hashtags).map(([hashtag, count]) => ({
-      hashtag,
-      count
-    }))
-    hashtagsByCount.sort((hashtagA, hashtagB) => hashtagB.count - hashtagA.count)
+    const hashtagsByCount = Object.entries(aggregateData.hashtags).reduce(
+      (topHashtags, [hashtag, count]) => {
+        for(let i = 0; i < this.options.maxRanks; i++) {
+          if(!topHashtags[i] || count > topHashtags[i].count) {
+            topHashtags.splice(i, 0, { hashtag, count })
+            topHashtags.splice(this.options.maxRanks, 1)
+            break
+          }
+        }
+        return topHashtags
+      },
+      []
+    )
 
     return {
       count: aggregateData.count,

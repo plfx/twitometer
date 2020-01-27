@@ -2,8 +2,13 @@ const { DataViewBase } = require('../base')
 const emojiRegex = require('emoji-regex')()
 
 class EmojiStatsView extends DataViewBase {
-  constructor() {
+  constructor(options = {}) {
     super('emojiStats')
+
+    const optionsDefaults = {
+      maxRanks: 5
+    }
+    this.options = Object.assign({}, optionsDefaults, options)
   }
 
   createSample() {
@@ -56,11 +61,19 @@ class EmojiStatsView extends DataViewBase {
   }
 
   generateReport(aggregateData) {
-    const emojiByCount = Object.entries(aggregateData.emoji).map(([emoji, count]) => ({
-      emoji,
-      count
-    }))
-    emojiByCount.sort((emojiA, emojiB) => emojiB.count - emojiA.count)
+    const emojiByCount = Object.entries(aggregateData.emoji).reduce(
+      (topEmoji, [emoji, count]) => {
+        for(let i = 0; i < this.options.maxRanks; i++) {
+          if(!topEmoji[i] || count > topEmoji[i].count) {
+            topEmoji.splice(i, 0, { emoji, count })
+            topEmoji.splice(this.options.maxRanks, 1)
+            break
+          }
+        }
+        return topEmoji
+      },
+      []
+    )
 
     return {
       count: aggregateData.count,

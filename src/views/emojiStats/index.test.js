@@ -4,7 +4,9 @@ const { EmojiStatsView } = require('./')
 
 describe('EmojiStatsView', function() {
   before(function() {
-    this.view = new EmojiStatsView()
+    this.view = new EmojiStatsView({
+      maxRanks: 4
+    })
   })
 
   describe('processTweet', function() {
@@ -80,12 +82,13 @@ describe('EmojiStatsView', function() {
     before(function() {
       this.report = this.view.generateReport({
         count: 100,
-        countWithEmoji: 10,
+        countWithEmoji: 20,
         emoji: {
           '😊': 4,
-          '🐉': 1,
           '🐹': 3,
-          '🙄': 2
+          '🐉': 5,
+          '🙄': 2,
+          '🙁': 1 // this emoji will not appear in results, because of the maxRanks options
         }
       })
     })
@@ -93,12 +96,12 @@ describe('EmojiStatsView', function() {
     it('generates correct stats', function() {
       assert.deepEqual(this.report, {
         count: 100,
-        countWithEmoji: 10,
+        countWithEmoji: 20,
         emojiByCount: [
+          { emoji: '🐉', count: 5 },
           { emoji: '😊', count: 4 },
           { emoji: '🐹', count: 3 },
-          { emoji: '🙄', count: 2 },
-          { emoji: '🐉', count: 1 }
+          { emoji: '🙄', count: 2 }
         ]
       })
     })

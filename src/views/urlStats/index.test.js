@@ -4,7 +4,9 @@ const { UrlStatsView } = require('./')
 
 describe('UrlStatsView', function() {
   before(function() {
-    this.view = new UrlStatsView()
+    this.view = new UrlStatsView({
+      maxRanks: 4
+    })
   })
 
   describe('processTweet', function() {
@@ -96,9 +98,10 @@ describe('UrlStatsView', function() {
         countWithUrls: 10,
         domains: {
           'domain0.com': 4,
-          'domain1.com': 1,
+          'domain1.com': 5,
           'domain2.com': 3,
-          'domain3.com': 2
+          'domain3.com': 2,
+          'unpopulardomain.com': 1
         }
       })
     })
@@ -109,10 +112,10 @@ describe('UrlStatsView', function() {
         countWithUrls: 10,
         urlRatio: 0.1,
         domains: [
+          { domain: 'domain1.com', count: 5 },
           { domain: 'domain0.com', count: 4 },
           { domain: 'domain2.com', count: 3 },
-          { domain: 'domain3.com', count: 2 },
-          { domain: 'domain1.com', count: 1 }
+          { domain: 'domain3.com', count: 2 }
         ]
       })
     })

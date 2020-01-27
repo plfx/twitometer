@@ -4,7 +4,9 @@ const { HashtagStatsView } = require('./')
 
 describe('HashtagStatsView', function() {
   before(function() {
-    this.view = new HashtagStatsView()
+    this.view = new HashtagStatsView({
+      maxRanks: 4
+    })
   })
 
   describe('processTweet', function() {
@@ -96,9 +98,10 @@ describe('HashtagStatsView', function() {
         countWithHashtags: 10,
         hashtags: {
           'hashtag0': 4,
-          'hashtag1': 1,
+          'hashtag1': 5,
           'hashtag2': 3,
-          'hashtag3': 2
+          'hashtag3': 2,
+          'hashtagIgnored': 1
         }
       })
     })
@@ -108,10 +111,10 @@ describe('HashtagStatsView', function() {
         count: 100,
         countWithHashtags: 10,
         hashtagsByCount: [
+          { hashtag: 'hashtag1', count: 5 },
           { hashtag: 'hashtag0', count: 4 },
           { hashtag: 'hashtag2', count: 3 },
-          { hashtag: 'hashtag3', count: 2 },
-          { hashtag: 'hashtag1', count: 1 }
+          { hashtag: 'hashtag3', count: 2 }
         ]
       })
     })

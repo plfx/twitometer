@@ -1,8 +1,13 @@
 const { DataViewBase } = require('../base')
 
 class UrlStatsView extends DataViewBase {
-  constructor() {
+  constructor(options = {}) {
     super('urlStats')
+
+    const optionsDefaults = {
+      maxRanks: 5
+    }
+    this.options = Object.assign({}, optionsDefaults, options)
   }
 
   createSample() {
@@ -54,17 +59,25 @@ class UrlStatsView extends DataViewBase {
   generateReport(aggregateData) {
     const urlRatio = (aggregateData.countWithUrls) && (aggregateData.countWithUrls / aggregateData.count)
 
-    const domainsSorted = Object.entries(aggregateData.domains).map(([domain, count]) => ({
-      domain,
-      count
-    }))
-    domainsSorted.sort((domainA, domainB) => domainB.count - domainA.count)
+    const domainsByCount = Object.entries(aggregateData.domains).reduce(
+      (topDomains, [domain, count]) => {
+        for(let i = 0; i < this.options.maxRanks; i++) {
+          if(!topDomains[i] || count > topDomains[i].count) {
+            topDomains.splice(i, 0, { domain, count })
+            topDomains.splice(this.options.maxRanks, 1)
+            break
+          }
+        }
+        return topDomains
+      },
+      []
+    )
 
     return {
       count: aggregateData.count,
       countWithUrls: aggregateData.countWithUrls,
       urlRatio,
-      domains: domainsSorted
+      domains: domainsByCount
     }
   }
 }
