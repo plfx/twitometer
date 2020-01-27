@@ -17,7 +17,10 @@ const views = [
   new EmojiStatsView()
 ]
 
-const processor = new WindowedProcessor(views)
+const processor = new WindowedProcessor(views, {
+  dataWindowSizeSeconds: 24 * 60 * 60, // roll off data after 24 hours
+  dataWindowResolution: 4320, // 20-second sample accumulation
+})
 
 getStream().then((stream) => {
   new ConsolePresenter(processor, stream)

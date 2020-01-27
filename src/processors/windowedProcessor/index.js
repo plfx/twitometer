@@ -3,7 +3,7 @@ const { DataViewBase } = require('../../views/base')
 class WindowedProcessor {
   constructor(views, options = {}) {
     const optionsDefaults = {
-      dataWindowSizeSeconds: 24 * 60 * 60 * 1000, // 1 day
+      dataWindowSizeSeconds: 24 * 60 * 60, // 1 day
       dataWindowResolution: 400,
       getCurrentTimeSeconds: () => Math.floor(Date.now() / 1000),
       dawnOfTime: options.getCurrentTimeSeconds ? options.getCurrentTimeSeconds() : Math.floor(Date.now() / 1000)
@@ -58,7 +58,7 @@ class WindowedProcessor {
     const sampleSizeSeconds = this.options.dataWindowSizeSeconds / this.options.dataWindowResolution
     const currentTimeSeconds = this.options.getCurrentTimeSeconds() - this.options.dawnOfTime
     const currentSampleStartSeconds = currentTimeSeconds - (currentTimeSeconds % sampleSizeSeconds)
-    const windowStartSeconds = currentTimeSeconds - this.options.dataWindowSizeSeconds
+    const windowStartSeconds = Math.max(0, currentTimeSeconds - this.options.dataWindowSizeSeconds)
 
     const report = {}
 

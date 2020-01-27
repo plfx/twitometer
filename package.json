@@ -4,12 +4,15 @@
   "description": "Twitter Stream Analyzer",
   "main": "index.js",
   "scripts": {
+    "start": "node ./src",
     "test": "mocha **/*.test.js"
   },
   "author": "palafx@gmail.com",
   "license": "ISC",
   "dependencies": {
     "emoji-regex": "^8.0.0",
+    "js-yaml": "^3.13.1",
+    "log-update": "^3.3.0",
     "twitter": "^1.7.1"
   },
   "devDependencies": {
