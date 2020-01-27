@@ -18,8 +18,8 @@ const views = [
 ]
 
 const processor = new WindowedProcessor(views, {
-  dataWindowSizeSeconds: 24 * 60 * 60, // roll off data after 24 hours
-  dataWindowResolution: 2160, // 40-second sample accumulation
+  dataWindowSizeSeconds: 6 * 60 * 60, // roll off data after 6 hours
+  dataWindowResolution: 6 * 60, // divide the 6 hour window into 360 sample buffers
 })
 
 getStream().then((stream) => {

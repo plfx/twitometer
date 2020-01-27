@@ -60,7 +60,9 @@ class WindowedProcessor {
     const currentSampleStartSeconds = currentTimeSeconds - (currentTimeSeconds % sampleSizeSeconds)
     const windowStartSeconds = Math.max(0, currentTimeSeconds - this.options.dataWindowSizeSeconds)
 
-    const report = {}
+    const report = {
+      elapsedTweets: this.elapsedTweets
+    }
 
     this.views.forEach((view) => {
       const viewName = view.getName()
@@ -75,7 +77,6 @@ class WindowedProcessor {
       report[viewName] = view.generateReport(aggregateData, currentTimeSeconds)
     })
 
-    report.elapsedTweets = this.elapsedTweets
     return report
   }
 }
