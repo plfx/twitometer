@@ -45,6 +45,9 @@ class WindowedProcessor {
         sampleData[viewName] = view.createSample(sampleStartSeconds, sampleSizeSeconds)
       })
       this.dataSamples[sampleStartSeconds.toString()] = sampleData
+      setTimeout(() => {
+        delete this.dataSamples[sampleStartSeconds.toString()]
+      }, (this.options.dataWindowSizeSeconds + sampleSizeSeconds) * 1000)
     }
 
     this.views.forEach((view) => {
