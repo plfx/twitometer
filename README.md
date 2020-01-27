@@ -12,7 +12,9 @@ npm install
 npm run start
 ```
 
-In default configuration, the data analyzed is limited to the last ten minutes. Data is rolled off and no longer factored into the statistics after that time window. You can increase or decrease the length of the data window by altering the configuration passed to WindowedProcessor in `src/index.js`.
+In default configuration, the data analyzed is limited to the last ten minutes. Data is rolled off and no longer factored into the statistics after that time window. You can increase or decrease the length of the data window by altering the configuration passed to WindowedProcessor in `src/index.js`. The console will update the statistics once per second until halted with signal 2.
+
+![Example Results](exampleResults.png)
 
 ## Tests
 
