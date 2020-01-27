@@ -10,7 +10,7 @@ class ConsolePresenter {
 
     this.displayHandle = setInterval(async () => logUpdate(
       yaml.safeDump(await this.processor.report())
-    ), 500)
+    ), 1000)
   }
 }
 
