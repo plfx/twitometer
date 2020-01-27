@@ -4,8 +4,11 @@ A live twitter sample analysis tool.
 
 ## Functionality
 
-This tool uses a live feed of sample statuses from Twitter's streaming API to provide basic statistics. To test it, you can run the default configuration with
+This tool uses a live feed of sample statuses from Twitter's streaming API to provide basic statistics. Before use, you need to fill credentials for the Twitter API in the file `creds.json`.
+
+To use it, you can run the default configuration with
 ```sh
+npm install
 npm run start
 ```
 
