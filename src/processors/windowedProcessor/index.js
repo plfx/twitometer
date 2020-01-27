@@ -58,7 +58,7 @@ class WindowedProcessor {
     const sampleSizeSeconds = this.options.dataWindowSizeSeconds / this.options.dataWindowResolution
     const currentTimeSeconds = this.options.getCurrentTimeSeconds() - this.options.dawnOfTime
     const currentSampleStartSeconds = currentTimeSeconds - (currentTimeSeconds % sampleSizeSeconds)
-    const windowStartSeconds = nowSeconds - this.options.dataWindowSizeSeconds
+    const windowStartSeconds = currentTimeSeconds - this.options.dataWindowSizeSeconds
 
     const report = {}
 

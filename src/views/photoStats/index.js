@@ -2,7 +2,7 @@ const { DataViewBase } = require('../base')
 
 class PhotoStatsView extends DataViewBase {
   constructor() {
-    super('urlStats')
+    super('photoStats')
   }
 
   createSample() {
@@ -14,7 +14,7 @@ class PhotoStatsView extends DataViewBase {
 
   processTweet(tweet, sampleData) {
     sampleData.count++
-    if(tweet.entities.media.length > 0) {
+    if(tweet.entities.media && tweet.entities.media.length > 0) {
       if(tweet.entities.media.some((m) => m.type === 'photo')) {
         sampleData.countWithPhotos++
       }
