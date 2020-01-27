@@ -1,3 +1,6 @@
+const yaml = require('js-yaml')
+const logUpdate = require('log-update')
+
 class ConsolePresenter {
   constructor(processor, stream) {
     this.processor = processor
@@ -5,8 +8,8 @@ class ConsolePresenter {
 
     this.stream.on('data', (data) => this.processor.handle(data))
 
-    this.displayHandle = setInterval(async () => console.log(
-      JSON.stringify(await this.processor.report(), null, 2)
+    this.displayHandle = setInterval(async () => logUpdate(
+      yaml.safeDump(await this.processor.report())
     ), 500)
   }
 }
