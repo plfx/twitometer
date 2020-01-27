@@ -63,7 +63,11 @@ class WindowedProcessor {
     const currentSampleStartSeconds = currentTimeSeconds - (currentTimeSeconds % sampleSizeSeconds)
     const windowStartSeconds = Math.max(0, currentTimeSeconds - this.options.dataWindowSizeSeconds)
 
+    const windowStartSecondsAbsolute = windowStartSeconds + this.options.dawnOfTime
+    const windowStartTimeDate = new Date(windowStartSecondsAbsolute * 1000)
+
     const report = {
+      dataStartTime: windowStartTimeDate.toISOString(),
       elapsedTweets: this.elapsedTweets
     }
 

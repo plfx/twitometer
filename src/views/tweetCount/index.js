@@ -33,6 +33,7 @@ class TweetCountView extends DataViewBase {
 
   generateReport(aggregateData) {
     return {
+      count: aggregateData.count,
       avgTweetsPerHour: aggregateData.count * 3600 / aggregateData.timeSpanSeconds
     }
   }
