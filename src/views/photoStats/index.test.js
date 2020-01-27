@@ -69,7 +69,6 @@ describe('PhotoStatsView', function() {
 
     it('generates correct stats', function() {
       assert.deepEqual(this.report, {
-        count: 100,
         countWithPhotos: 10,
         photoRatio: 0.1
       })

@@ -95,7 +95,6 @@ describe('EmojiStatsView', function() {
 
     it('generates correct stats', function() {
       assert.deepEqual(this.report, {
-        count: 100,
         countWithEmoji: 20,
         emojiByCount: [
           { emoji: '🐉', count: 5 },

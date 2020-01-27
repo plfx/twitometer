@@ -74,7 +74,6 @@ class UrlStatsView extends DataViewBase {
     )
 
     return {
-      count: aggregateData.count,
       countWithUrls: aggregateData.countWithUrls,
       urlRatio,
       domains: domainsByCount

@@ -108,7 +108,6 @@ describe('HashtagStatsView', function() {
 
     it('generates correct stats', function() {
       assert.deepEqual(this.report, {
-        count: 100,
         countWithHashtags: 10,
         hashtagsByCount: [
           { hashtag: 'hashtag1', count: 5 },

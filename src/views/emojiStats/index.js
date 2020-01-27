@@ -76,7 +76,6 @@ class EmojiStatsView extends DataViewBase {
     )
 
     return {
-      count: aggregateData.count,
       countWithEmoji: aggregateData.countWithEmoji,
       emojiByCount
     }

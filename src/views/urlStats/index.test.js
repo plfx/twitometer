@@ -108,7 +108,6 @@ describe('UrlStatsView', function() {
 
     it('generates correct stats', function() {
       assert.deepEqual(this.report, {
-        count: 100,
         countWithUrls: 10,
         urlRatio: 0.1,
         domains: [

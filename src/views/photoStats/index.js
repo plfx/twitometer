@@ -39,7 +39,6 @@ class PhotoStatsView extends DataViewBase {
     const photoRatio = (aggregateData.countWithPhotos) && (aggregateData.countWithPhotos / aggregateData.count)
 
     return {
-      count: aggregateData.count,
       countWithPhotos: aggregateData.countWithPhotos,
       photoRatio
     }

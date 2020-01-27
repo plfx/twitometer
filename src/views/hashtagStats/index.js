@@ -72,7 +72,6 @@ class HashtagStatsView extends DataViewBase {
     )
 
     return {
-      count: aggregateData.count,
       countWithHashtags: aggregateData.countWithHashtags,
       hashtagsByCount
     }
