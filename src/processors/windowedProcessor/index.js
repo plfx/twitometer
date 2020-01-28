@@ -24,6 +24,13 @@ class WindowedProcessor {
     this.elapsedTweets = 0
   }
 
+  /*
+                            DATA WINDOW
+  |--------------------------------------------------------------|
+  [--][--][--][--][--][--][--][--][--][--][--][--][--][--][--][--]
+                             SAMPLES
+  */
+
   handle(tweet) {
     this.elapsedTweets++
     const timestampSeconds = Math.floor(new Date(tweet.created_at).valueOf() / 1000) - this.options.dawnOfTime
