@@ -20,7 +20,7 @@ class UrlStatsView extends DataViewBase {
 
   processTweet(tweet, sampleData) {
     sampleData.count++
-    if(tweet.entities.urls.length > 0) {
+    if(tweet.entities && tweet.entities.urls && tweet.entities.urls.length > 0) {
       sampleData.countWithUrls++
       tweet.entities.urls.forEach((urlData) => {
         const url = new URL(urlData.expanded_url)

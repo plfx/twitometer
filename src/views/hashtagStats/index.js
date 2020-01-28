@@ -20,7 +20,7 @@ class HashtagStatsView extends DataViewBase {
 
   processTweet(tweet, sampleData) {
     sampleData.count++
-    if(tweet.entities.hashtags.length > 0) {
+    if(tweet.entities && tweet.entities.hashtags && tweet.entities.hashtags.length > 0) {
       sampleData.countWithHashtags++
       tweet.entities.hashtags.forEach((hashtagData) => {
         // hashtags are not case sensitive, so normalize to lower case

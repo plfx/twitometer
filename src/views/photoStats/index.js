@@ -14,7 +14,7 @@ class PhotoStatsView extends DataViewBase {
 
   processTweet(tweet, sampleData) {
     sampleData.count++
-    if(tweet.entities.media && tweet.entities.media.length > 0) {
+    if(tweet.entities && tweet.entities.media && tweet.entities.media.length > 0) {
       if(tweet.entities.media.some((m) => m.type === 'photo')) {
         sampleData.countWithPhotos++
       }
