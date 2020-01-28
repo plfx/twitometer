@@ -66,6 +66,7 @@ describe('TweetCountView', function() {
 
     it('generates correct stats', function() {
       assert.deepEqual(this.report, {
+        count: 100,
         avgTweetsPerHour: 120000
       })
     })
